@@ -12,8 +12,9 @@ class CAddInNative : public IComponentBase
 public:
     enum Props
     {
-        ePropIsEnabled = 0,
+		ePropIsEnabled = 0,
         ePropIsTimerPresent,
+		ePropVersion,
         ePropLast      // Always last
     };
 
@@ -70,6 +71,7 @@ private:
 
     bool                m_boolEnabled;
     uint32_t            m_uiTimer;
+	wchar_t*			m_Version;
 };
 
 #endif //__ADDINNATIVE_H__

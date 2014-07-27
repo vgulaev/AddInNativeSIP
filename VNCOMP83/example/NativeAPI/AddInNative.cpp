@@ -19,11 +19,11 @@
 
 #define BASE_ERRNO     7
 
-static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent"};
+static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version"};
 static wchar_t *g_MethodNames[] = {L"Enable", L"Disable", L"ShowInStatusLine", 
         L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox"};
 
-static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер"};
+static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия"};
 static wchar_t *g_MethodNamesRu[] = {L"Включить", L"Выключить", L"ПоказатьВСтрокеСтатуса", 
         L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение"};
 
@@ -86,6 +86,8 @@ CAddInNative::CAddInNative()
 {
     m_iMemory = 0;
     m_iConnect = 0;
+	
+	//m_Version = L"v0.001 status:beta";
 }
 //---------------------------------------------------------------------------//
 CAddInNative::~CAddInNative()
@@ -95,6 +97,7 @@ CAddInNative::~CAddInNative()
 bool CAddInNative::Init(void* pConnection)
 { 
     m_iConnect = (IAddInDefBase*)pConnection;
+	m_Version = L"v0.001 status:beta";
     return m_iConnect != NULL;
 }
 //---------------------------------------------------------------------------//
@@ -113,7 +116,7 @@ void CAddInNative::Done()
 //---------------------------------------------------------------------------//
 bool CAddInNative::RegisterExtensionAs(WCHAR_T** wsExtensionName)
 { 
-    wchar_t *wsExtension = L"AddInNativeExtension";
+    wchar_t *wsExtension = L"AddInNativeSIPClient";
     int iActualSize = ::wcslen(wsExtension) + 1;
     WCHAR_T* dest = 0;
 
@@ -193,6 +196,13 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
         TV_VT(pvarPropVal) = VTYPE_BOOL;
         TV_BOOL(pvarPropVal) = true;
         break;
+	case ePropVersion:
+		//tVariant *var = m_Version;
+        //m_iConnect->SetStatusLine(var->pwstrVal);
+		TV_VT(pvarPropVal) = VTYPE_PWSTR;
+		pvarPropVal->pwstrVal = m_Version;
+		pvarPropVal->wstrLen = wcslen(m_Version);
+		break;
     default:
         return false;
     }
@@ -223,6 +233,7 @@ bool CAddInNative::IsPropReadable(const long lPropNum)
     { 
     case ePropIsEnabled:
     case ePropIsTimerPresent:
+	case ePropVersion:
         return true;
     default:
         return false;
@@ -426,7 +437,8 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
                         if (succeed)
                             imsgbox->Alert(L"OKFFFFF");
                         else
-                            imsgbox->Alert(L"Cancel");
+                            //imsgbox->Alert(L"Cancel");
+							imsgbox->Alert(m_Version);
                     }
                 }
             }
