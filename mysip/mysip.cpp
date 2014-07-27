@@ -61,6 +61,17 @@ void MyCall::onCallState(OnCallStateParam &prm)
     }
 }
 
+/*void call_some_where(MyAccount &acc)
+{
+    // Make outgoing call
+    Call *call = new MyCall(acc);
+    acc->calls.push_back(call);
+    CallOpParam prm(true);
+    prm.opt.audioCount = 1;
+    prm.opt.videoCount = 0;
+    call->makeCall("sip:102@192.168.1.103", prm);
+}*/
+
 int _tmain(int argc, _TCHAR* argv[])
 {
 	Endpoint ep;
@@ -111,7 +122,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	pj_thread_sleep(2000);
 
     // Make outgoing call
-    Call *call = new MyCall(*acc);
+    /*Call *call = new MyCall(*acc);
     acc->calls.push_back(call);
     CallOpParam prm(true);
     prm.opt.audioCount = 1;
@@ -121,11 +132,29 @@ int _tmain(int argc, _TCHAR* argv[])
     // Hangup all calls
     pj_thread_sleep(8000);
     ep.hangupAllCalls();
-    pj_thread_sleep(4000);
+    pj_thread_sleep(4000);*/
 
 	//pj_thread_sleep(1000000);
     // Here we don't have anything else to do..
-
+	int x;
+	while (true)
+	{
+		std::cin >> x;
+		if (x == 0) {
+			break;
+		} else if (x == 1)
+		{
+			Call *call = new MyCall(*acc);
+			acc->calls.push_back(call);
+			CallOpParam prm(true);
+			prm.opt.audioCount = 1;
+			prm.opt.videoCount = 0;
+			call->makeCall("sip:102@192.168.1.103", prm);
+			//call_some_where(*acc);
+		}
+		std::cout << x << std::endl << "Ready!" << std::endl;
+	}
+	
     // Delete the account. This will unregister from server
     delete acc;
 
