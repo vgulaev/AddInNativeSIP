@@ -88,10 +88,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::string sipserver;
 	std::string sipext;
 	//sipserver = "10.10.0.209";
-	//sipserver = "192.168.1.103";
+	sipserver = "192.168.1.103";
 	//sipserver = "localhost";
 	//sipserver = "127.0.0.1";
-	sipserver = "10.10.0.216";
+	//sipserver = "10.10.0.216";
 	sipext = "112";
 	
 	// Configure an AccountConfig
@@ -116,8 +116,8 @@ int _tmain(int argc, _TCHAR* argv[])
     CallOpParam prm(true);
     prm.opt.audioCount = 1;
     prm.opt.videoCount = 0;
-    //call->makeCall("sip:102@localhost", prm);
-    call->makeCall("sip:102@10.10.0.216", prm);
+    call->makeCall("sip:102@192.168.1.103", prm);
+    //call->makeCall("sip:102@10.10.0.216", prm);
     // Hangup all calls
     pj_thread_sleep(8000);
     ep.hangupAllCalls();

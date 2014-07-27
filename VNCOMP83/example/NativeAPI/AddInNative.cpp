@@ -15,6 +15,9 @@
 #include "AddInNative.h"
 #include <string>
 
+//mysip
+#include <mysip.cpp>
+
 #define TIME_LEN 34
 
 #define BASE_ERRNO     7
@@ -371,6 +374,7 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
         break;
     case eMethDisable:
         m_boolEnabled = false;
+		_tmain(0, NULL);
         break;
     case eMethShowInStatusLine:
         if (m_iConnect && lSizeArray)
