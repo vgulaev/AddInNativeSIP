@@ -424,7 +424,7 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
                     {
                         bool succeed = TV_BOOL(&retVal);
                         if (succeed)
-                            imsgbox->Alert(L"OK");
+                            imsgbox->Alert(L"OKFFFFF");
                         else
                             imsgbox->Alert(L"Cancel");
                     }
