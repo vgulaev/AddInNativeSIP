@@ -7,6 +7,8 @@
 
 using namespace pj;
 
+Endpoint ep;
+
 class MyAccount;
 
 class MyCall : public Call
@@ -22,6 +24,7 @@ public:
     }
     
     virtual void onCallState(OnCallStateParam &prm);
+	virtual void onCallMediaState(OnCallMediaStateParam &prm);
 };
 
 // Subclass to extend the Account and get notifications etc.
@@ -77,9 +80,29 @@ void MyCall::onCallState(OnCallStateParam &prm)
     }
 }
 
+void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
+{
+    CallInfo ci = getInfo();
+    // Iterate all the call medias
+    for (unsigned i = 0; i < ci.media.size(); i++) {
+        if (ci.media[i].type==PJMEDIA_TYPE_AUDIO && getMedia(i)) {
+            AudioMedia *aud_med = (AudioMedia *)getMedia(i);
+
+            // Connect the call audio media to sound device
+            /*AudDevManager& mgr = ep.audDevManager();
+            aud_med->startTransmit(mgr.getPlaybackDevMedia());
+            mgr.getCaptureDevMedia().startTransmit(*aud_med);*/
+
+			AudioMedia& play_med = ep.audDevManager().getPlaybackDevMedia();
+			AudioMedia& cap_med = ep.audDevManager().getCaptureDevMedia();
+
+			//cap_med.startTransmit(*aud_med);
+        }
+    }
+}
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	Endpoint ep;
 
     ep.libCreate();
 
@@ -138,6 +161,8 @@ int _tmain(int argc, _TCHAR* argv[])
     pj_thread_sleep(8000);
     ep.hangupAllCalls();
     pj_thread_sleep(4000);*/
+	//play_med = ep.audDevManager().getPlaybackDevMedia();
+	//cap_med = ep.audDevManager().getCaptureDevMedia();
 
 	std::string x;
 	while (true)
@@ -150,12 +175,21 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			ep.hangupAllCalls();
 			Call *call = new MyCall(*acc);
+			//CallInfo ci = call->getInfo();
 			acc->calls.push_back(call);
 			CallOpParam prm(true);
 			prm.opt.audioCount = 1;
 			prm.opt.videoCount = 0;
+
 			call->makeCall("sip:101@" + sipserver, prm);
 		}
+		if (x == "2")
+		{
+			//play_med = ep.audDevManager().getPlaybackDevMedia();
+			//cap_med = ep.audDevManager().getCaptureDevMedia();
+			//cap_med.startTransmit(play_med);
+		}
+
 		std::cout << x << std::endl << "Ready!" << std::endl;
 	}
 	
