@@ -374,7 +374,7 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
         break;
     case eMethDisable:
         m_boolEnabled = false;
-		_tmain(0, NULL);
+		//_tmain(0, NULL);
         break;
     case eMethShowInStatusLine:
         if (m_iConnect && lSizeArray)

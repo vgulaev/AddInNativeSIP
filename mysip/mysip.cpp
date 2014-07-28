@@ -7,6 +7,23 @@
 
 using namespace pj;
 
+class MyAccount;
+
+class MyCall : public Call
+{
+private:
+    MyAccount *myAcc;
+
+public:
+    MyCall(Account &acc, int call_id = PJSUA_INVALID_ID)
+    : Call(acc, call_id)
+    {
+        myAcc = (MyAccount *)&acc;
+    }
+    
+    virtual void onCallState(OnCallStateParam &prm);
+};
+
 // Subclass to extend the Account and get notifications etc.
 class MyAccount : public Account {
 public:
@@ -29,21 +46,19 @@ public:
             }
         }
     }
-};
-
-class MyCall : public Call
-{
-private:
-    MyAccount *myAcc;
-
-public:
-    MyCall(Account &acc, int call_id = PJSUA_INVALID_ID)
-    : Call(acc, call_id)
+    virtual void onIncomingCall(OnIncomingCallParam &iprm)
     {
-        myAcc = (MyAccount *)&acc;
+        Call *call = new MyCall(*this, iprm.callId);
+        CallInfo ci = call->getInfo();
+        CallOpParam prm;
+
+        std::cout << "*** Incoming Call: " <<  ci.remoteUri << " ["
+                  << ci.stateText << "]" << std::endl;
+        
+        calls.push_back(call);
+        prm.statusCode = (pjsip_status_code)200;
+        call->answer(prm);
     }
-    
-    virtual void onCallState(OnCallStateParam &prm);
 };
 
 void MyCall::onCallState(OnCallStateParam &prm)
@@ -51,6 +66,7 @@ void MyCall::onCallState(OnCallStateParam &prm)
     PJ_UNUSED_ARG(prm);
 
     CallInfo ci = getInfo();
+
     std::cout << "*** Call: " <<  ci.remoteUri << " [" << ci.stateText
               << "]" << std::endl;
     
@@ -60,17 +76,6 @@ void MyCall::onCallState(OnCallStateParam &prm)
         delete this;
     }
 }
-
-/*void call_some_where(MyAccount &acc)
-{
-    // Make outgoing call
-    Call *call = new MyCall(acc);
-    acc->calls.push_back(call);
-    CallOpParam prm(true);
-    prm.opt.audioCount = 1;
-    prm.opt.videoCount = 0;
-    call->makeCall("sip:102@192.168.1.103", prm);
-}*/
 
 int _tmain(int argc, _TCHAR* argv[])
 {
@@ -99,11 +104,11 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::string sipserver;
 	std::string sipext;
 	//sipserver = "10.10.0.209";
-	sipserver = "192.168.1.103";
+	//sipserver = "192.168.1.103";
 	//sipserver = "localhost";
 	//sipserver = "127.0.0.1";
-	//sipserver = "10.10.0.216";
-	sipext = "112";
+	sipserver = "10.10.0.231";
+	sipext = "102";
 	
 	// Configure an AccountConfig
     AccountConfig acfg;
@@ -112,7 +117,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	//acfg.regConfig.proxyUse = 0;
 	//acfg.natConfig.sipStunUse = PJSUA_STUN_USE_DISABLED;
 	//std::cout << "*****888888888**********" << acfg.natConfig.sipStunUse << std::endl;
-    AuthCredInfo cred("digest", "*", "112", 0, "admin");
+    AuthCredInfo cred("digest", "*", sipext, 0, "admin");
     acfg.sipConfig.authCreds.push_back( cred );
 
     // Create the account
@@ -134,23 +139,22 @@ int _tmain(int argc, _TCHAR* argv[])
     ep.hangupAllCalls();
     pj_thread_sleep(4000);*/
 
-	//pj_thread_sleep(1000000);
-    // Here we don't have anything else to do..
-	int x;
+	std::string x;
 	while (true)
 	{
 		std::cin >> x;
-		if (x == 0) {
+		if (x == "0") {
 			break;
-		} else if (x == 1)
+		}
+		if (x == "1")
 		{
+			ep.hangupAllCalls();
 			Call *call = new MyCall(*acc);
 			acc->calls.push_back(call);
 			CallOpParam prm(true);
 			prm.opt.audioCount = 1;
 			prm.opt.videoCount = 0;
-			call->makeCall("sip:102@192.168.1.103", prm);
-			//call_some_where(*acc);
+			call->makeCall("sip:101@" + sipserver, prm);
 		}
 		std::cout << x << std::endl << "Ready!" << std::endl;
 	}
