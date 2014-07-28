@@ -27,23 +27,6 @@ void MyCall::onCallState(OnCallStateParam &prm)
     }
 }
 
-void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
-{
-    CallInfo ci = getInfo();
-    // Iterate all the call medias
-    for (unsigned i = 0; i < ci.media.size(); i++) {
-        if (ci.media[i].type==PJMEDIA_TYPE_AUDIO && getMedia(i)) {
-            /*AudioMedia *aud_med = (AudioMedia *)getMedia(i);
-
-            // Connect the call audio media to sound device
-            AudDevManager& mgr = ep.audDevManager();
-            aud_med->startTransmit(mgr.getPlaybackDevMedia());
-            mgr.getCaptureDevMedia().startTransmit(*aud_med);*/
-        }
-    }
-}
-
-
 int _tmain(int argc, _TCHAR* argv[])
 {
 	VGsip mysip;
@@ -57,6 +40,8 @@ int _tmain(int argc, _TCHAR* argv[])
 	mysip.init();
 
 	mysip.reg_on_srv();
+
+	mysip.make_call(L"sip:101@10.10.0.209");
 
 	std::string x;
 	std::cin >> x;

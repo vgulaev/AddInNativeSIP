@@ -76,9 +76,11 @@ public:
 	wchar_t* pass;
 
 	Endpoint ep;
+	MyAccount *acc;
 
 	int init();
 	bool reg_on_srv();
+	bool make_call(wchar_t* dest);
 private:
 
 	
