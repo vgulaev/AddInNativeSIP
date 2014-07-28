@@ -60,6 +60,7 @@ public:
         
         calls.push_back(call);
         prm.statusCode = (pjsip_status_code)200;
+		prm.opt.audioCount = 1;
         call->answer(prm);
     }
 };
@@ -89,14 +90,9 @@ void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
             AudioMedia *aud_med = (AudioMedia *)getMedia(i);
 
             // Connect the call audio media to sound device
-            /*AudDevManager& mgr = ep.audDevManager();
+            AudDevManager& mgr = ep.audDevManager();
             aud_med->startTransmit(mgr.getPlaybackDevMedia());
-            mgr.getCaptureDevMedia().startTransmit(*aud_med);*/
-
-			AudioMedia& play_med = ep.audDevManager().getPlaybackDevMedia();
-			AudioMedia& cap_med = ep.audDevManager().getCaptureDevMedia();
-
-			//cap_med.startTransmit(*aud_med);
+            mgr.getCaptureDevMedia().startTransmit(*aud_med);
         }
     }
 }
@@ -126,11 +122,11 @@ int _tmain(int argc, _TCHAR* argv[])
 
 	std::string sipserver;
 	std::string sipext;
-	//sipserver = "10.10.0.209";
+	sipserver = "10.10.0.209";
 	//sipserver = "192.168.1.103";
 	//sipserver = "localhost";
 	//sipserver = "127.0.0.1";
-	sipserver = "10.10.0.231";
+	//sipserver = "10.10.0.231";
 	sipext = "102";
 	
 	// Configure an AccountConfig
