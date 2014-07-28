@@ -4,66 +4,12 @@
 #include "stdafx.h"
 #include <pjsua2.hpp>
 #include <iostream>
+#include "vgsip.h"
 
 using namespace pj;
 
-Endpoint ep;
+//Endpoint ep;
 
-class MyAccount;
-
-class MyCall : public Call
-{
-private:
-    MyAccount *myAcc;
-
-public:
-    MyCall(Account &acc, int call_id = PJSUA_INVALID_ID)
-    : Call(acc, call_id)
-    {
-        myAcc = (MyAccount *)&acc;
-    }
-    
-    virtual void onCallState(OnCallStateParam &prm);
-	virtual void onCallMediaState(OnCallMediaStateParam &prm);
-};
-
-// Subclass to extend the Account and get notifications etc.
-class MyAccount : public Account {
-public:
-    std::vector<Call *> calls;
-
-public:
-    virtual void onRegState(OnRegStateParam &prm) {
-        AccountInfo ai = getInfo();
-        std::cout << (ai.regIsActive? "*** Register:" : "*** Unregister:")
-                  << " code=" << prm.code << std::endl;
-    }
-    void removeCall(Call *call)
-    {
-        for (std::vector<Call *>::iterator it = calls.begin();
-             it != calls.end(); ++it)
-        {
-            if (*it == call) {
-                calls.erase(it);
-                break;
-            }
-        }
-    }
-    virtual void onIncomingCall(OnIncomingCallParam &iprm)
-    {
-        Call *call = new MyCall(*this, iprm.callId);
-        CallInfo ci = call->getInfo();
-        CallOpParam prm;
-
-        std::cout << "*** Incoming Call: " <<  ci.remoteUri << " ["
-                  << ci.stateText << "]" << std::endl;
-        
-        calls.push_back(call);
-        prm.statusCode = (pjsip_status_code)200;
-		prm.opt.audioCount = 1;
-        call->answer(prm);
-    }
-};
 
 void MyCall::onCallState(OnCallStateParam &prm)
 {
@@ -87,20 +33,37 @@ void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
     // Iterate all the call medias
     for (unsigned i = 0; i < ci.media.size(); i++) {
         if (ci.media[i].type==PJMEDIA_TYPE_AUDIO && getMedia(i)) {
-            AudioMedia *aud_med = (AudioMedia *)getMedia(i);
+            /*AudioMedia *aud_med = (AudioMedia *)getMedia(i);
 
             // Connect the call audio media to sound device
             AudDevManager& mgr = ep.audDevManager();
             aud_med->startTransmit(mgr.getPlaybackDevMedia());
-            mgr.getCaptureDevMedia().startTransmit(*aud_med);
+            mgr.getCaptureDevMedia().startTransmit(*aud_med);*/
         }
     }
 }
 
+
 int _tmain(int argc, _TCHAR* argv[])
 {
+	VGsip mysip;
+	
+	mysip.extention		= L"102";
+	mysip.user			= L"102";
+	mysip.pass			= L"admin";
+	mysip.realm			= L"*";
+	mysip.domain		= L"10.10.0.209";
 
-    ep.libCreate();
+	mysip.init();
+
+	mysip.reg_on_srv();
+
+	std::string x;
+	std::cin >> x;
+
+	return 0;
+
+    /*ep.libCreate();
 
     // Initialize endpoint
     EpConfig ep_cfg;
@@ -156,7 +119,7 @@ int _tmain(int argc, _TCHAR* argv[])
     // Hangup all calls
     pj_thread_sleep(8000);
     ep.hangupAllCalls();
-    pj_thread_sleep(4000);*/
+    pj_thread_sleep(4000);
 	//play_med = ep.audDevManager().getPlaybackDevMedia();
 	//cap_med = ep.audDevManager().getCaptureDevMedia();
 
@@ -192,7 +155,7 @@ int _tmain(int argc, _TCHAR* argv[])
     // Delete the account. This will unregister from server
     delete acc;
 
-	return 0;
+	return 0;*/
 }
 
 /*#include "stdafx.h"
