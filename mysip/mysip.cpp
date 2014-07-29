@@ -33,9 +33,16 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	VGsip mysip;
 	
-	mysip.demo();
+	std::wstring a(L"vg");
+
+	
+	//wcscpy(mysip.extention, );
+	//mysip.demo();
 	
 	std::string x;
+
+	x = unicode_to_pj_str(a.c_str());
+	std::cout << x;
 	std::cin >> x;
 
 	return 0;

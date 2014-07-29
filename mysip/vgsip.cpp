@@ -2,7 +2,7 @@
 
 #include "vgsip.h"
 
-std::string unicode_to_pj_str(wchar_t* str)
+std::string unicode_to_pj_str(const wchar_t* str)
 {
 	int buf_size = wcslen(str);
 	char* temp_char = new char[buf_size];

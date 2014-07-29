@@ -6,6 +6,8 @@
 
 using namespace pj;
 
+std::string unicode_to_pj_str(const wchar_t* str);
+
 class MyAccount;
 
 class MyCall : public Call
