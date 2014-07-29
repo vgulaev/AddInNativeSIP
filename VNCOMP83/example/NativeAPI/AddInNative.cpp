@@ -27,12 +27,13 @@
 static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version", L"Extention",
         L"Domain", L"Realm", L"User", L"Pass", L"Proxies"};
 static wchar_t *g_MethodNames[] = {L"Enable", L"Disable", L"ShowInStatusLine", 
-        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init"};
+        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init", L"Reg", L"MakeCall"};
 
 static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия", L"ВнутренийНомер", L"Домен", L"Зона",
         L"Пользователь", L"Пароль", L"ПроксиСервер"};
 static wchar_t *g_MethodNamesRu[] = {L"Включить", L"Выключить", L"ПоказатьВСтрокеСтатуса", 
-        L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение", L"Инициализировать"};
+        L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение", L"Инициализировать",
+		L"Зарегестрироваться", L"Позвонить"};
 
 static const wchar_t g_kClassNames[] = L"CAddInNative"; //"|OtherClass1|OtherClass2";
 static IAddInDefBase *pAsyncEvent = NULL;
@@ -251,8 +252,8 @@ bool CAddInNative::SetPropVal(const long lPropNum, tVariant *varPropVal)
 		{
 		if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-
 		m_extention = VariantToWStr(varPropVal);
+		m_sip_client.extention = unicode_to_pj_str(m_extention.c_str());
 		}
         break;
     case ePropIsTimerPresent:
@@ -388,6 +389,8 @@ bool CAddInNative::GetParamDefValue(const long lMethodNum, const long lParamNum,
     case eMethStopTimer:
     case eMethShowMsgBox:
 	case eMethInit:
+	case eMethReg:
+	case eMethMakeCall:
         // There are no parameter values by default 
         break;
     default:
@@ -499,7 +502,22 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
         break;
 	case eMethInit:
 		{
-			m_sip_client.demo();
+			m_sip_client.init();
+		}
+		break;
+	case eMethReg:
+		{
+			m_sip_client.user			= "vgulaev";
+			m_sip_client.pass			= "28061984";
+			m_sip_client.domain			= "sip2sip.info";
+			m_sip_client.realm			= "*";
+			m_sip_client.proxies		= "proxy.sipthor.net";
+			m_sip_client.reg_on_srv();
+		}
+		break;
+	case eMethMakeCall:
+		{
+			m_sip_client.make_call("sip:kiss@sip2sip.info");
 		}
 		break;
     default:

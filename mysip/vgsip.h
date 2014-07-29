@@ -71,19 +71,19 @@ public:
 	~VGsip();
 	
 	//for registration
-	wchar_t* extention;
-	wchar_t* domain;
-	wchar_t* realm;
-	wchar_t* user;
-	wchar_t* pass;
-	wchar_t* proxies;
+	std::string extention;
+	std::string domain;
+	std::string realm;
+	std::string user;
+	std::string pass;
+	std::string proxies;
 
 	Endpoint ep;
 	MyAccount *acc;
 
 	int init();
 	bool reg_on_srv();
-	bool make_call(wchar_t* dest);
+	bool make_call(std::string dest);
 	int demo();
 private:
 

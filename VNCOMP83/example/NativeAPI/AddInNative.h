@@ -35,6 +35,8 @@ public:
         eMethLoadPicture,
         eMethShowMsgBox,
 		eMethInit,
+		eMethReg,
+		eMethMakeCall,
         eMethLast      // Always last
     };
 
