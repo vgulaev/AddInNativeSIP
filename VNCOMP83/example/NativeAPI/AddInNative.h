@@ -14,7 +14,14 @@ public:
     {
 		ePropIsEnabled = 0,
         ePropIsTimerPresent,
+		//SIP Client
 		ePropVersion,
+        ePropExtention,
+        ePropDomain,
+        ePropRealm,
+        ePropUser,
+        ePropPass,
+        ePropProxies,
         ePropLast      // Always last
     };
 
@@ -62,6 +69,8 @@ public:
     // LocaleBase
     virtual void ADDIN_API SetLocale(const WCHAR_T* loc);
     
+	virtual bool PutStrParam(tVariant* pvarPropVal,const std::wstring& param);
+	virtual std::wstring VariantToWStr(tVariant* pvarPropVal);
 private:
     long findName(wchar_t* names[], const wchar_t* name, const uint32_t size) const;
     void addError(uint32_t wcode, const wchar_t* source, 
@@ -70,9 +79,18 @@ private:
     IAddInDefBase      *m_iConnect;
     IMemoryManager     *m_iMemory;
 
-    bool                m_boolEnabled;
+    // Delete in future
+	bool                m_boolEnabled;
     uint32_t            m_uiTimer;
-	wchar_t*			m_Version;
+	// For SIP
+	std::wstring		m_Version;
+	std::wstring		m_extention;
+	std::wstring		m_domain;
+	std::wstring		m_realm;
+	std::wstring		m_user;
+	std::wstring		m_pass;
+	std::wstring		m_proxies;
+
 	VGsip				m_sip_client;
 };
 

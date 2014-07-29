@@ -2,6 +2,7 @@
 //
 
 #include "stdafx.h"
+//#include <stdint.h>
 #include <pjsua2.hpp>
 #include <iostream>
 #include "vgsip.h"
@@ -32,25 +33,8 @@ int _tmain(int argc, _TCHAR* argv[])
 {
 	VGsip mysip;
 	
-	/*mysip.extention		= L"vgulaev";
-	mysip.user			= L"vgulaev";
-	mysip.pass			= L"28061984";
-	mysip.domain		= L"sip2sip.info";
-	//mysip.extention		= L"102";
-	//mysip.user			= L"102";
-	//mysip.pass			= L"admin";
-	mysip.realm			= L"*";
-	//mysip.domain		= L"10.10.0.209";
-
-	mysip.init();
-
-	mysip.reg_on_srv();
-
-	mysip.make_call(L"sip:kiss@sip2sip.info");*/
 	mysip.demo();
-
-	MyClass a;
-	a.foo();
+	
 	std::string x;
 	std::cin >> x;
 

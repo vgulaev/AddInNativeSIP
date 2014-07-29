@@ -24,11 +24,13 @@
 
 #define BASE_ERRNO     7
 
-static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version"};
+static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version", L"Extention",
+        L"Domain", L"Realm", L"User", L"Pass", L"Proxies"};
 static wchar_t *g_MethodNames[] = {L"Enable", L"Disable", L"ShowInStatusLine", 
         L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init"};
 
-static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия"};
+static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия", L"ВнутренийНомер", L"Домен", L"Зона",
+        L"Пользователь", L"Пароль", L"ПроксиСервер"};
 static wchar_t *g_MethodNamesRu[] = {L"Включить", L"Выключить", L"ПоказатьВСтрокеСтатуса", 
         L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение", L"Инициализировать"};
 
@@ -91,7 +93,11 @@ CAddInNative::CAddInNative()
 {
     m_iMemory = 0;
     m_iConnect = 0;
-	
+	m_domain = L"";
+	m_realm = L"";
+	m_user = L"";
+	m_pass = L"";
+	m_proxies = L"";
 	//m_Version = L"v0.001 status:beta";
 }
 //---------------------------------------------------------------------------//
@@ -103,6 +109,7 @@ bool CAddInNative::Init(void* pConnection)
 { 
     m_iConnect = (IAddInDefBase*)pConnection;
 	m_Version = L"v0.001 status:alpha";
+	m_extention = L"dfsdsdsv";
     return m_iConnect != NULL;
 }
 //---------------------------------------------------------------------------//
@@ -191,7 +198,8 @@ const WCHAR_T* CAddInNative::GetPropName(long lPropNum, long lPropAlias)
 //---------------------------------------------------------------------------//
 bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
 { 
-    switch(lPropNum)
+    WCHAR_T* names = NULL;
+	switch(lPropNum)
     {
     case ePropIsEnabled:
         TV_VT(pvarPropVal) = VTYPE_BOOL;
@@ -202,11 +210,25 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
         TV_BOOL(pvarPropVal) = true;
         break;
 	case ePropVersion:
-		//tVariant *var = m_Version;
-        //m_iConnect->SetStatusLine(var->pwstrVal);
-		TV_VT(pvarPropVal) = VTYPE_PWSTR;
-		pvarPropVal->pwstrVal = m_Version;
-		pvarPropVal->wstrLen = wcslen(m_Version);
+		PutStrParam(pvarPropVal, m_Version);
+		break;
+    case ePropExtention:
+        PutStrParam(pvarPropVal, m_extention);
+		break;
+    case ePropDomain:
+        PutStrParam(pvarPropVal, m_Version);
+		break;
+    case ePropRealm:
+        PutStrParam(pvarPropVal, m_Version);
+		break;
+    case ePropUser:
+        PutStrParam(pvarPropVal, m_Version);
+		break;
+    case ePropPass:
+        PutStrParam(pvarPropVal, m_Version);
+		break;
+    case ePropProxies:
+        PutStrParam(pvarPropVal, m_Version);
 		break;
     default:
         return false;
@@ -217,12 +239,21 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
 //---------------------------------------------------------------------------//
 bool CAddInNative::SetPropVal(const long lPropNum, tVariant *varPropVal)
 { 
-    switch(lPropNum)
+    
+	switch(lPropNum)
     { 
     case ePropIsEnabled:
         if (TV_VT(varPropVal) != VTYPE_BOOL)
             return false;
         m_boolEnabled = TV_BOOL(varPropVal);
+        break;
+    case ePropExtention:
+		{
+		if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+
+		m_extention = VariantToWStr(varPropVal);
+		}
         break;
     case ePropIsTimerPresent:
     default:
@@ -239,6 +270,12 @@ bool CAddInNative::IsPropReadable(const long lPropNum)
     case ePropIsEnabled:
     case ePropIsTimerPresent:
 	case ePropVersion:
+    case ePropExtention:
+    case ePropDomain:
+    case ePropRealm:
+    case ePropUser:
+    case ePropPass:
+    case ePropProxies:
         return true;
     default:
         return false;
@@ -252,6 +289,12 @@ bool CAddInNative::IsPropWritable(const long lPropNum)
     switch(lPropNum)
     { 
     case ePropIsEnabled:
+    case ePropExtention:
+    case ePropDomain:
+    case ePropRealm:
+    case ePropUser:
+    case ePropPass:
+    case ePropProxies:
         return true;
     case ePropIsTimerPresent:
         return false;
@@ -443,12 +486,12 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
                         bool succeed = TV_BOOL(&retVal);
                         if (succeed)
 						{
-							m_sip_client.demo();
+							//m_sip_client.demo();
 							imsgbox->Alert(L"OKFFFFF");
 						}
                         else
-                            //imsgbox->Alert(L"Cancel");
-							imsgbox->Alert(m_Version);
+                            imsgbox->Alert(L"Cancel");
+							//imsgbox->Alert(m_Version);
                     }
                 }
             }
@@ -702,3 +745,36 @@ uint32_t getLenShortWcharStr(const WCHAR_T* Source)
     return res;
 }
 //---------------------------------------------------------------------------//
+bool CAddInNative::PutStrParam(tVariant* pvarPropVal,const std::wstring& param)
+{
+	bool bRes = true;
+
+	WCHAR_T *wsPropValue = 0;
+        
+    TV_VT(pvarPropVal) = VTYPE_PWSTR;
+    
+    //std::wstring wTemp(param.begin(),param.end() );
+ 
+    int iActualSize = param.length() + 1;
+    if (m_iMemory)
+    {
+        if (m_iMemory->AllocMemory((void**)&wsPropValue, iActualSize * sizeof(WCHAR_T)))
+            ::convToShortWchar(&wsPropValue, param.c_str(), iActualSize);
+    }
+    TV_WSTR(pvarPropVal) = wsPropValue;
+    pvarPropVal->wstrLen = iActualSize-1;
+   
+	return bRes;
+}
+std::wstring CAddInNative::VariantToWStr(tVariant* pvarPropVal)
+{
+	WCHAR_T* name = NULL;
+
+	::convFromShortWchar(&name, TV_WSTR(pvarPropVal));
+
+	std::wstring res(name);
+
+	delete[] name;
+
+	return res;
+}

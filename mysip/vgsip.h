@@ -69,12 +69,12 @@ public:
 	~VGsip();
 	
 	//for registration
-
 	wchar_t* extention;
 	wchar_t* domain;
 	wchar_t* realm;
 	wchar_t* user;
 	wchar_t* pass;
+	wchar_t* proxies;
 
 	Endpoint ep;
 	MyAccount *acc;

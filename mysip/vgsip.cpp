@@ -30,6 +30,12 @@ void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
 
 VGsip::VGsip()
 {
+	extention		= L"";
+	user			= L"";
+	pass			= L"";
+	domain			= L"";
+	realm			= L"";
+	proxies			= L"";
 }
 
 VGsip::~VGsip()
@@ -65,7 +71,11 @@ bool VGsip::reg_on_srv() {
 	std::string user_str	= unicode_to_pj_str(user);
 	std::string pass_str	= unicode_to_pj_str(pass);
 	acfg.idUri = "sip:" + unicode_to_pj_str(extention) + "@" + domain_str;
-	acfg.sipConfig.proxies.push_back("sip:proxy.sipthor.net;transport=udp");
+	
+	if (wcslen(proxies) > 0)
+	{
+		acfg.sipConfig.proxies.push_back("sip:" + unicode_to_pj_str(proxies) + ";transport=udp");
+	}
 	acfg.regConfig.registrarUri = "sip:" + domain_str;
 	
 	//acfg.regConfig.proxyUse
@@ -99,7 +109,7 @@ int VGsip::demo()
 	pass			= L"28061984";
 	domain			= L"sip2sip.info";
 	realm			= L"*";
-
+	proxies			= L"proxy.sipthor.net";
 	init();
 
 	reg_on_srv();
