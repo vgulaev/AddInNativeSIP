@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include <pjsua2.hpp>
 #include <pj/unicode.h>
 #include <iostream>
@@ -19,7 +20,7 @@ public:
         myAcc = (MyAccount *)&acc;
     }
     
-    virtual void onCallState(OnCallStateParam &prm);
+    //virtual void onCallState(OnCallStateParam &prm);
 	virtual void onCallMediaState(OnCallMediaStateParam &prm);
 };
 
@@ -81,6 +82,7 @@ public:
 	int init();
 	bool reg_on_srv();
 	bool make_call(wchar_t* dest);
+	int demo();
 private:
 
 	

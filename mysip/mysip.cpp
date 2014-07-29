@@ -5,13 +5,14 @@
 #include <pjsua2.hpp>
 #include <iostream>
 #include "vgsip.h"
+#include "vgscl.h"
 
 using namespace pj;
 
 //Endpoint ep;
 
 
-void MyCall::onCallState(OnCallStateParam &prm)
+/*void MyCall::onCallState(OnCallStateParam &prm)
 {
     PJ_UNUSED_ARG(prm);
 
@@ -25,24 +26,31 @@ void MyCall::onCallState(OnCallStateParam &prm)
         // Delete the call
         delete this;
     }
-}
+}*/
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	VGsip mysip;
 	
-	mysip.extention		= L"102";
-	mysip.user			= L"102";
-	mysip.pass			= L"admin";
+	/*mysip.extention		= L"vgulaev";
+	mysip.user			= L"vgulaev";
+	mysip.pass			= L"28061984";
+	mysip.domain		= L"sip2sip.info";
+	//mysip.extention		= L"102";
+	//mysip.user			= L"102";
+	//mysip.pass			= L"admin";
 	mysip.realm			= L"*";
-	mysip.domain		= L"10.10.0.209";
+	//mysip.domain		= L"10.10.0.209";
 
 	mysip.init();
 
 	mysip.reg_on_srv();
 
-	mysip.make_call(L"sip:101@10.10.0.209");
+	mysip.make_call(L"sip:kiss@sip2sip.info");*/
+	mysip.demo();
 
+	MyClass a;
+	a.foo();
 	std::string x;
 	std::cin >> x;
 

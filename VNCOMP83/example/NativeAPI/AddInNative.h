@@ -27,6 +27,7 @@ public:
         eMethStopTimer,
         eMethLoadPicture,
         eMethShowMsgBox,
+		eMethInit,
         eMethLast      // Always last
     };
 
@@ -72,6 +73,7 @@ private:
     bool                m_boolEnabled;
     uint32_t            m_uiTimer;
 	wchar_t*			m_Version;
+	VGsip				m_sip_client;
 };
 
 #endif //__ADDINNATIVE_H__

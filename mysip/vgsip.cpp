@@ -1,4 +1,5 @@
 #include "stdafx.h"
+
 #include "vgsip.h"
 
 std::string unicode_to_pj_str(wchar_t* str)
@@ -64,7 +65,10 @@ bool VGsip::reg_on_srv() {
 	std::string user_str	= unicode_to_pj_str(user);
 	std::string pass_str	= unicode_to_pj_str(pass);
 	acfg.idUri = "sip:" + unicode_to_pj_str(extention) + "@" + domain_str;
-    acfg.regConfig.registrarUri = "sip:" + domain_str;
+	acfg.sipConfig.proxies.push_back("sip:proxy.sipthor.net;transport=udp");
+	acfg.regConfig.registrarUri = "sip:" + domain_str;
+	
+	//acfg.regConfig.proxyUse
 	AuthCredInfo cred("digest", realm_str, user_str, 0, pass_str);
 
 	acfg.sipConfig.authCreds.push_back( cred );
@@ -86,4 +90,21 @@ bool VGsip::make_call(wchar_t* dest)
 	call->makeCall(unicode_to_pj_str(dest), prm);
 
 	return true;
+}
+
+int VGsip::demo()
+{
+	extention		= L"vgulaev";
+	user			= L"vgulaev";
+	pass			= L"28061984";
+	domain			= L"sip2sip.info";
+	realm			= L"*";
+
+	init();
+
+	reg_on_srv();
+
+	make_call(L"sip:kiss@sip2sip.info");
+
+	return 0;
 }

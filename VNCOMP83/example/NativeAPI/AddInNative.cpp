@@ -12,11 +12,13 @@
 
 #include <stdio.h>
 #include <wchar.h>
+//#include "vgsip.h"
+#include "vgsip.cpp"
 #include "AddInNative.h"
 #include <string>
 
 //mysip
-#include <mysip.cpp>
+//#include <mysip.cpp>
 
 #define TIME_LEN 34
 
@@ -24,11 +26,11 @@
 
 static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version"};
 static wchar_t *g_MethodNames[] = {L"Enable", L"Disable", L"ShowInStatusLine", 
-        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox"};
+        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init"};
 
 static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия"};
 static wchar_t *g_MethodNamesRu[] = {L"Включить", L"Выключить", L"ПоказатьВСтрокеСтатуса", 
-        L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение"};
+        L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение", L"Инициализировать"};
 
 static const wchar_t g_kClassNames[] = L"CAddInNative"; //"|OtherClass1|OtherClass2";
 static IAddInDefBase *pAsyncEvent = NULL;
@@ -100,7 +102,7 @@ CAddInNative::~CAddInNative()
 bool CAddInNative::Init(void* pConnection)
 { 
     m_iConnect = (IAddInDefBase*)pConnection;
-	m_Version = L"v0.001 status:beta";
+	m_Version = L"v0.001 status:alpha";
     return m_iConnect != NULL;
 }
 //---------------------------------------------------------------------------//
@@ -342,6 +344,7 @@ bool CAddInNative::GetParamDefValue(const long lMethodNum, const long lParamNum,
     case eMethStartTimer:
     case eMethStopTimer:
     case eMethShowMsgBox:
+	case eMethInit:
         // There are no parameter values by default 
         break;
     default:
@@ -439,7 +442,10 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
                     {
                         bool succeed = TV_BOOL(&retVal);
                         if (succeed)
-                            imsgbox->Alert(L"OKFFFFF");
+						{
+							m_sip_client.demo();
+							imsgbox->Alert(L"OKFFFFF");
+						}
                         else
                             //imsgbox->Alert(L"Cancel");
 							imsgbox->Alert(m_Version);
@@ -448,6 +454,11 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
             }
         }
         break;
+	case eMethInit:
+		{
+			m_sip_client.demo();
+		}
+		break;
     default:
         return false;
     }
