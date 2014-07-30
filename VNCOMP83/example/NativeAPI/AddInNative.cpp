@@ -123,6 +123,10 @@ long CAddInNative::GetInfo()
 //---------------------------------------------------------------------------//
 void CAddInNative::Done()
 {
+	m_sip_client.destroy_client();
+	IAddInDefBaseEx* cnn = (IAddInDefBaseEx*)m_iConnect;
+	IMsgBox* imsgbox = (IMsgBox*)cnn->GetInterface(eIMsgBox);
+	imsgbox->Alert(L"Спасибо!!!");
 }
 /////////////////////////////////////////////////////////////////////////////
 // ILanguageExtenderBase
@@ -365,6 +369,7 @@ long CAddInNative::GetNParams(const long lMethodNum)
     switch(lMethodNum)
     { 
     case eMethShowInStatusLine:
+	case eMethMakeCall:
         return 1;
     case eMethLoadPicture:
         return 1;
@@ -517,7 +522,7 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 		break;
 	case eMethMakeCall:
 		{
-			m_sip_client.make_call("sip:kiss@sip2sip.info");
+			m_sip_client.make_call(unicode_to_pj_str(paParams->pwstrVal));
 		}
 		break;
     default:

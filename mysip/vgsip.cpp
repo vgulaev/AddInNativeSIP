@@ -13,6 +13,22 @@ std::string unicode_to_pj_str(const wchar_t* str)
 	return res;
 }
 
+void MyCall::onCallState(OnCallStateParam &prm)
+{
+    PJ_UNUSED_ARG(prm);
+
+    CallInfo ci = getInfo();
+
+    std::cout << "*** Call: " <<  ci.remoteUri << " [" << ci.stateText
+              << "]" << std::endl;
+    
+    if (ci.state == PJSIP_INV_STATE_DISCONNECTED) {
+        myAcc->removeCall(this);
+        // Delete the call
+        delete this;
+    }
+}
+
 void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
 {
     CallInfo ci = getInfo();
@@ -47,6 +63,7 @@ int VGsip::init() {
 	ep.libCreate();
 
     EpConfig ep_cfg;
+	//ep_cfg.logConfig.level = 0;
     ep.libInit( ep_cfg );
 
     TransportConfig tcfg;
@@ -61,6 +78,14 @@ int VGsip::init() {
     // Start the library (worker threads etc)
     ep.libStart();
     std::cout << "*** PJSUA2 STARTED ***" << std::endl;
+	return 0;
+}
+
+int VGsip::destroy_client()
+{
+	ep.hangupAllCalls();
+	acc->calls.clear();
+	pj_thread_sleep(2000);
 	return 0;
 }
 

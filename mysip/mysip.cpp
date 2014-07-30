@@ -10,33 +10,59 @@
 
 using namespace pj;
 
-//Endpoint ep;
-
-
-/*void MyCall::onCallState(OnCallStateParam &prm)
+int cred_for_mpc_aster(VGsip& mysip)
 {
-    PJ_UNUSED_ARG(prm);
+	mysip.extention		= "102";
+	mysip.user			= "102";
+	mysip.pass			= "admin";
+	mysip.domain		= "10.10.0.209";
+	mysip.realm			= "*";
 
-    CallInfo ci = getInfo();
+	return 0;
+}
 
-    std::cout << "*** Call: " <<  ci.remoteUri << " [" << ci.stateText
-              << "]" << std::endl;
-    
-    if (ci.state == PJSIP_INV_STATE_DISCONNECTED) {
-        myAcc->removeCall(this);
-        // Delete the call
-        delete this;
-    }
-}*/
+int cred_for_sip2sip(VGsip& mysip)
+{
+	mysip.extention		= "vgulaev";
+	mysip.user			= "vgulaev";
+	mysip.pass			= "28061984";
+	mysip.domain		= "sip2sip.info";
+	mysip.realm			= "*";
+	mysip.proxies		= "proxy.sipthor.net";
+
+	return 0;
+}
 
 int _tmain(int argc, _TCHAR* argv[])
 {
 	VGsip mysip;
 	
-	mysip.demo();
+	//mysip.demo();
+
+	//cred_for_sip2sip(mysip);
+	cred_for_mpc_aster(mysip);
+
+	mysip.init();
+	mysip.reg_on_srv();
+
+	//mysip.make_call("sip:kiss@sip2sip.info");
+	mysip.make_call("sip:101@10.10.0.209");
+	mysip.make_call("sip:103@10.10.0.209");
 	
+	std::cout << mysip.extention;
+
 	std::string x;
 	std::cin >> x;
+
+	mysip.ep.hangupAllCalls();
+	mysip.acc->calls.clear();
+	pj_thread_sleep(2000);
+	/*for (int i = 0; i < mysip.acc->calls.size(); i++)
+	{
+		
+	}*/
+
+	//mysip.ep.libDestroy();
 
 	return 0;
 

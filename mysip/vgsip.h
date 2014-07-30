@@ -22,7 +22,7 @@ public:
         myAcc = (MyAccount *)&acc;
     }
     
-    //virtual void onCallState(OnCallStateParam &prm);
+    virtual void onCallState(OnCallStateParam &prm);
 	virtual void onCallMediaState(OnCallMediaStateParam &prm);
 };
 
@@ -85,6 +85,7 @@ public:
 	bool reg_on_srv();
 	bool make_call(std::string dest);
 	int demo();
+	int destroy_client();
 private:
 
 	
