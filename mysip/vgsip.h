@@ -86,6 +86,7 @@ public:
 	bool make_call(std::string dest);
 	int demo();
 	int destroy_client();
+	int setNullDev();
 private:
 
 	

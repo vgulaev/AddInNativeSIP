@@ -10,6 +10,8 @@
 
 using namespace pj;
 
+VGsip mysip;
+
 int cred_for_mpc_aster(VGsip& mysip)
 {
 	mysip.extention		= "102";
@@ -33,26 +35,93 @@ int cred_for_sip2sip(VGsip& mysip)
 	return 0;
 }
 
+int print_main_menu()
+{
+	std::cout << std::endl;
+	std::cout << "************************************" << std::endl;
+	std::cout << "* 0 - exit" << std::endl;
+	std::cout << "* cl - clear screen" << std::endl;
+	std::cout << "* 3 - new registration" << std::endl;
+	std::cout << "* 4 - make new call" << std::endl;
+	std::cout << "************************************" << std::endl;
+	return 0;
+}
+
+int input_str(std::string& val, std::string label_for_val)
+{
+	std::cout << label_for_val << "(type null for empty str):";
+	std::cin >> val;
+	if (val == "null")
+	{
+		val = "";
+	}
+	return 0;
+}
+int new_registration()
+{
+	input_str(mysip.extention, "extention");
+	input_str(mysip.user, "user");
+	input_str(mysip.pass, "pass");
+	input_str(mysip.domain, "domain");
+	input_str(mysip.realm, "realm");
+	input_str(mysip.proxies, "proxies");
+	mysip.reg_on_srv();
+	return 0;
+}
 int _tmain(int argc, _TCHAR* argv[])
 {
-	VGsip mysip;
 	
 	//mysip.demo();
 
-	//cred_for_sip2sip(mysip);
-	cred_for_mpc_aster(mysip);
+	cred_for_sip2sip(mysip);
+	//cred_for_mpc_aster(mysip);
 
 	mysip.init();
 	mysip.reg_on_srv();
 
 	//mysip.make_call("sip:kiss@sip2sip.info");
-	mysip.make_call("sip:101@10.10.0.209");
-	mysip.make_call("sip:103@10.10.0.209");
-	
-	std::cout << mysip.extention;
 
 	std::string x;
-	std::cin >> x;
+
+	while (true)
+	{
+		print_main_menu();
+		std::cin >> x;
+		if (x == "0")
+		{
+			break;
+		}
+		if (x == "1")
+		{
+			mysip.make_call("sip:101@10.10.0.209");
+			mysip.make_call("sip:103@10.10.0.209");
+		}
+		if (x == "2")
+		{
+			std::cout << mysip.acc->calls.size() << std::endl;
+		}
+		if ((x == "?") || (x == "h"))
+		{
+			print_main_menu();
+		}
+		if (x == "cl")
+		{
+			system("cls");
+		}
+		if (x == "3")
+		{
+			new_registration();
+		}
+		if (x == "4")
+		{
+			std::string dest;
+			std::cout << "dest uri(in sip:<ext>@<realm> format exampl: sip:101@10.10.0.209):";
+			std::cin >> dest;
+			mysip.make_call(dest);
+		}
+	}
+	
+	std::cout << mysip.extention;
 
 	mysip.ep.hangupAllCalls();
 	mysip.acc->calls.clear();

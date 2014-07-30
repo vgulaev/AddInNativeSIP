@@ -63,9 +63,8 @@ int VGsip::init() {
 	ep.libCreate();
 
     EpConfig ep_cfg;
-	//ep_cfg.logConfig.level = 0;
+	ep_cfg.logConfig.level = 0;
     ep.libInit( ep_cfg );
-
     TransportConfig tcfg;
     //tcfg.port = 5060;
     try {
@@ -85,6 +84,7 @@ int VGsip::destroy_client()
 {
 	ep.hangupAllCalls();
 	acc->calls.clear();
+	// need time for destruction, all calls resised by himself
 	pj_thread_sleep(2000);
 	return 0;
 }
@@ -143,4 +143,8 @@ int VGsip::demo()
 	make_call("sip:kiss@sip2sip.info");
 
 	return 0;
+}
+int VGsip::setNullDev()
+{
+	ep.instance().audDevManager().setNullDev();
 }

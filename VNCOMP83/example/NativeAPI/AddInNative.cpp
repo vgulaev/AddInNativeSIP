@@ -221,19 +221,19 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
         PutStrParam(pvarPropVal, m_extention);
 		break;
     case ePropDomain:
-        PutStrParam(pvarPropVal, m_Version);
+        PutStrParam(pvarPropVal, m_domain);
 		break;
     case ePropRealm:
-        PutStrParam(pvarPropVal, m_Version);
+        PutStrParam(pvarPropVal, m_realm);
 		break;
     case ePropUser:
-        PutStrParam(pvarPropVal, m_Version);
+        PutStrParam(pvarPropVal, m_user);
 		break;
     case ePropPass:
-        PutStrParam(pvarPropVal, m_Version);
+        PutStrParam(pvarPropVal, m_pass);
 		break;
     case ePropProxies:
-        PutStrParam(pvarPropVal, m_Version);
+        PutStrParam(pvarPropVal, m_proxies);
 		break;
     default:
         return false;
@@ -259,6 +259,46 @@ bool CAddInNative::SetPropVal(const long lPropNum, tVariant *varPropVal)
 		m_extention = VariantToWStr(varPropVal);
 		m_sip_client.extention = unicode_to_pj_str(m_extention.c_str());
 		}
+        break;
+    case ePropUser:
+        {
+        if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+        m_user = VariantToWStr(varPropVal);
+        m_sip_client.user = unicode_to_pj_str(m_user.c_str());
+        }
+        break;
+    case ePropPass:
+        {
+        if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+        m_pass = VariantToWStr(varPropVal);
+        m_sip_client.pass = unicode_to_pj_str(m_pass.c_str());
+        }
+        break;
+    case ePropRealm:
+        {
+        if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+        m_realm = VariantToWStr(varPropVal);
+        m_sip_client.realm = unicode_to_pj_str(m_realm.c_str());
+        }
+        break;
+    case ePropDomain:
+        {
+        if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+        m_domain = VariantToWStr(varPropVal);
+        m_sip_client.domain = unicode_to_pj_str(m_domain.c_str());
+        }
+        break;
+    case ePropProxies:
+        {
+        if (TV_VT(varPropVal) != VTYPE_PWSTR)
+            return false;
+        m_proxies = VariantToWStr(varPropVal);
+        m_sip_client.proxies = unicode_to_pj_str(m_proxies.c_str());
+        }
         break;
     case ePropIsTimerPresent:
     default:
@@ -512,11 +552,11 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 		break;
 	case eMethReg:
 		{
-			m_sip_client.user			= "vgulaev";
+			/*m_sip_client.user			= "vgulaev";
 			m_sip_client.pass			= "28061984";
 			m_sip_client.domain			= "sip2sip.info";
 			m_sip_client.realm			= "*";
-			m_sip_client.proxies		= "proxy.sipthor.net";
+			m_sip_client.proxies		= "proxy.sipthor.net";*/
 			m_sip_client.reg_on_srv();
 		}
 		break;
