@@ -37,6 +37,7 @@ public:
 		eMethInit,
 		eMethReg,
 		eMethMakeCall,
+		eMethsetNullDev,
         eMethLast      // Always last
     };
 

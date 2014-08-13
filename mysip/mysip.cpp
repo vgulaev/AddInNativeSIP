@@ -123,9 +123,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	std::cout << mysip.extention;
 
-	mysip.ep.hangupAllCalls();
+	mysip.destroy_client();
+	/*mysip.ep.hangupAllCalls();
 	mysip.acc->calls.clear();
-	pj_thread_sleep(2000);
+	pj_thread_sleep(2000);*/
 	/*for (int i = 0; i < mysip.acc->calls.size(); i++)
 	{
 		

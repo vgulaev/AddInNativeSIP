@@ -83,7 +83,7 @@ int VGsip::init() {
 int VGsip::destroy_client()
 {
 	ep.hangupAllCalls();
-	acc->calls.clear();
+	//acc->calls.clear();
 	// need time for destruction, all calls resised by himself
 	pj_thread_sleep(2000);
 	return 0;
@@ -147,4 +147,5 @@ int VGsip::demo()
 int VGsip::setNullDev()
 {
 	ep.instance().audDevManager().setNullDev();
+	return 0;
 }

@@ -27,13 +27,14 @@
 static wchar_t *g_PropNames[] = {L"IsEnabled", L"IsTimerPresent", L"Version", L"Extention",
         L"Domain", L"Realm", L"User", L"Pass", L"Proxies"};
 static wchar_t *g_MethodNames[] = {L"Enable", L"Disable", L"ShowInStatusLine", 
-        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init", L"Reg", L"MakeCall"};
+        L"StartTimer", L"StopTimer", L"LoadPicture", L"ShowMessageBox", L"Init", L"Reg", L"MakeCall",
+		L"setNullDev"};
 
 static wchar_t *g_PropNamesRu[] = {L"Включен", L"ЕстьТаймер", L"Версия", L"ВнутренийНомер", L"Домен", L"Зона",
         L"Пользователь", L"Пароль", L"ПроксиСервер"};
 static wchar_t *g_MethodNamesRu[] = {L"Включить", L"Выключить", L"ПоказатьВСтрокеСтатуса", 
         L"СтартТаймер", L"СтопТаймер", L"ЗагрузитьКартинку", L"ПоказатьСообщение", L"Инициализировать",
-		L"Зарегестрироваться", L"Позвонить"};
+		L"Зарегестрироваться", L"Позвонить", L"УстановитьЗвуковыеУстройстваNULL"};
 
 static const wchar_t g_kClassNames[] = L"CAddInNative"; //"|OtherClass1|OtherClass2";
 static IAddInDefBase *pAsyncEvent = NULL;
@@ -436,6 +437,7 @@ bool CAddInNative::GetParamDefValue(const long lMethodNum, const long lParamNum,
 	case eMethInit:
 	case eMethReg:
 	case eMethMakeCall:
+	case eMethsetNullDev:
         // There are no parameter values by default 
         break;
     default:
@@ -563,6 +565,11 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 	case eMethMakeCall:
 		{
 			m_sip_client.make_call(unicode_to_pj_str(paParams->pwstrVal));
+		}
+		break;
+	case eMethsetNullDev:
+		{
+			m_sip_client.setNullDev();
 		}
 		break;
     default:
