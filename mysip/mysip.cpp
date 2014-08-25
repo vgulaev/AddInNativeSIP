@@ -23,11 +23,23 @@ int cred_for_mpc_aster(VGsip& mysip)
 	return 0;
 }
 
-int cred_for_sip2sip(VGsip& mysip)
+int cred_for_sip2sip_vg(VGsip& mysip)
 {
 	mysip.extention		= "vgulaev";
 	mysip.user			= "vgulaev";
 	mysip.pass			= "28061984";
+	mysip.domain		= "sip2sip.info";
+	mysip.realm			= "*";
+	mysip.proxies		= "proxy.sipthor.net";
+
+	return 0;
+}
+
+int cred_for_sip2sip(VGsip& mysip)
+{
+	mysip.extention		= "sipfortest";
+	mysip.user			= "sipfortest";
+	mysip.pass			= "sipfortest";
 	mysip.domain		= "sip2sip.info";
 	mysip.realm			= "*";
 	mysip.proxies		= "proxy.sipthor.net";
@@ -41,8 +53,10 @@ int print_main_menu()
 	std::cout << "************************************" << std::endl;
 	std::cout << "* 0 - exit" << std::endl;
 	std::cout << "* cl - clear screen" << std::endl;
+	std::cout << "* cr - check reg state" << std::endl;
 	std::cout << "* 3 - new registration" << std::endl;
 	std::cout << "* 4 - make new call" << std::endl;
+	std::cout << "* 5 - make test to 3333" << std::endl;
 	std::cout << "************************************" << std::endl;
 	return 0;
 }
@@ -96,9 +110,30 @@ int _tmain(int argc, _TCHAR* argv[])
 			mysip.make_call("sip:101@10.10.0.209");
 			mysip.make_call("sip:103@10.10.0.209");
 		}
+		if (x == "a")
+		{
+			mysip.answer("sip:vgulaev@sip2sip.info");
+		}
+		if (x == "vg")
+		{
+			mysip.make_call("sip:vgulaev@sip2sip.info");
+		}
+		if (x == "5")
+		{
+			mysip.make_call("sip:3333@sip2sip.info");
+		}
+		if (x == "cr")
+		{
+			std::cout << "Reg state: "<< mysip.regIsActive() << std::endl;
+		}
+		if (x == "hg")
+		{
+			mysip.ep.hangupAllCalls();
+			std::cout << "Calls size: "<< mysip.acc->calls.size() << std::endl;
+		}
 		if (x == "2")
 		{
-			std::cout << mysip.acc->calls.size() << std::endl;
+			std::cout << "Calls size: "<< mysip.acc->calls.size() << std::endl;
 		}
 		if ((x == "?") || (x == "h"))
 		{
@@ -124,15 +159,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << mysip.extention;
 
 	mysip.destroy_client();
-	/*mysip.ep.hangupAllCalls();
-	mysip.acc->calls.clear();
-	pj_thread_sleep(2000);*/
-	/*for (int i = 0; i < mysip.acc->calls.size(); i++)
-	{
-		
-	}*/
-
-	//mysip.ep.libDestroy();
+	Endpoint::instance().hangupAllCalls();
 
 	return 0;
 

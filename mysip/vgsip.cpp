@@ -82,10 +82,20 @@ int VGsip::init() {
 
 int VGsip::destroy_client()
 {
-	ep.hangupAllCalls();
-	//acc->calls.clear();
+	/*CallOpParam op;
+	op.statusCode = PJSIP_SC_OK;				
+	while (acc->calls.size() != 0)
+	{
+		acc->calls[0]->hangup(op);
+		acc->removeCall(acc->calls[0]);
+		//pj_thread_sleep(1000);
+		//std::cout << "Calls size: "<< mysip.acc->calls.size() << std::endl;
+	}
+	//ep.hangupAllCalls();
+	//Endpoint::instance().libDestroy();
+	//acc->calls.clear();*/
 	// need time for destruction, all calls resised by himself
-	pj_thread_sleep(2000);
+	//pj_thread_sleep(2000);
 	return 0;
 }
 
@@ -148,4 +158,28 @@ int VGsip::setNullDev()
 {
 	ep.instance().audDevManager().setNullDev();
 	return 0;
+}
+
+bool VGsip::regIsActive()
+{
+	AccountInfo ai = acc->getInfo();
+	return ai.regIsActive;
+}
+
+bool VGsip::answer(std::string dest)
+{
+	CallInfo ci;
+	for (std::vector<Call *>::iterator it = acc->calls.begin();
+             it != acc->calls.end(); ++it)
+        {
+			ci = (*it)->getInfo();
+			
+			CallOpParam prm;
+			prm.statusCode = (pjsip_status_code)200;
+			prm.opt.audioCount = 1;
+			(*it)->answer(prm);
+
+			std::cout << ci.remoteUri << std::endl;
+       }
+	return true;
 }

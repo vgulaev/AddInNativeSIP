@@ -38,6 +38,7 @@ public:
 		eMethReg,
 		eMethMakeCall,
 		eMethsetNullDev,
+		eMethRegisterComplete,
         eMethLast      // Always last
     };
 

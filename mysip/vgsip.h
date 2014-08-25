@@ -58,9 +58,11 @@ public:
                   << ci.stateText << "]" << std::endl;
         
         calls.push_back(call);
-        prm.statusCode = (pjsip_status_code)200;
+        //prm.statusCode = (pjsip_status_code)200;
+		prm.statusCode = (pjsip_status_code)180;
 		prm.opt.audioCount = 1;
-        call->answer(prm);
+        //call->
+		call->answer(prm);
     }
 };
 
@@ -87,6 +89,8 @@ public:
 	int demo();
 	int destroy_client();
 	int setNullDev();
+	bool regIsActive();
+	bool answer(std::string dest);
 private:
 
 	
