@@ -12,13 +12,13 @@
 
 #include <stdio.h>
 #include <wchar.h>
-//#include "vgsip.h"
-#include "vgsip.cpp"
-#include "AddInNative.h"
-#include <string>
+#include <pjsua2.hpp>
+#include <iostream>
 
-//mysip
-//#include <mysip.cpp>
+//own headers
+#include "vgsip.h"
+//#include "vgsip.cpp"
+#include "AddInNative.h"
 
 #define TIME_LEN 34
 
@@ -461,6 +461,18 @@ bool CAddInNative::HasRetVal(const long lMethodNum)
 
     return false;
 }
+void myproc()
+{
+}
+void onIncomingCall()
+{
+	/*pAsyncEvent = m_iConnect;
+	if (!pAsyncEvent){}
+	else
+	{
+		pAsyncEvent->ExternalEvent(L"Hello", L"Hello", L"Hello");
+	}*/
+}
 //---------------------------------------------------------------------------//
 bool CAddInNative::CallAsProc(const long lMethodNum,
                     tVariant* paParams, const long lSizeArray)
@@ -538,7 +550,6 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
                         bool succeed = TV_BOOL(&retVal);
                         if (succeed)
 						{
-							//m_sip_client.demo();
 							imsgbox->Alert(L"OKFFFFF");
 						}
                         else
@@ -556,11 +567,6 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 		break;
 	case eMethReg:
 		{
-			/*m_sip_client.user			= "vgulaev";
-			m_sip_client.pass			= "28061984";
-			m_sip_client.domain			= "sip2sip.info";
-			m_sip_client.realm			= "*";
-			m_sip_client.proxies		= "proxy.sipthor.net";*/
 			m_sip_client.reg_on_srv();
 		}
 		break;

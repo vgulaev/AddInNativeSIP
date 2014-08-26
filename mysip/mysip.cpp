@@ -82,10 +82,9 @@ int new_registration()
 	mysip.reg_on_srv();
 	return 0;
 }
+
 int _tmain(int argc, _TCHAR* argv[])
 {
-	
-	//mysip.demo();
 
 	cred_for_sip2sip(mysip);
 	//cred_for_mpc_aster(mysip);

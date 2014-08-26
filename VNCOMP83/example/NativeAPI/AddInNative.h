@@ -79,6 +79,7 @@ private:
     long findName(wchar_t* names[], const wchar_t* name, const uint32_t size) const;
     void addError(uint32_t wcode, const wchar_t* source, 
                     const wchar_t* descriptor, long code);
+	//static void onIncomingCall();
     // Attributes
     IAddInDefBase      *m_iConnect;
     IMemoryManager     *m_iMemory;

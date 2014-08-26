@@ -1,20 +1,20 @@
-#include "stdafx.h"
+//#include "stdafx.h"
+#ifndef VGSIP_H
+#define VGSIP_H
 
-#include <pjsua2.hpp>
-#include <pj/unicode.h>
-#include <iostream>
+//#include <iostream>
 
 using namespace pj;
 
 std::string unicode_to_pj_str(const wchar_t* str);
 
+class VGsip;
 class MyAccount;
 
 class MyCall : public Call
 {
 private:
     MyAccount *myAcc;
-
 public:
     MyCall(Account &acc, int call_id = PJSUA_INVALID_ID)
     : Call(acc, call_id)
@@ -29,8 +29,10 @@ public:
 // Subclass to extend the Account and get notifications etc.
 class MyAccount : public Account {
 public:
-    std::vector<Call *> calls;
-
+	MyAccount();
+	VGsip *mySip;
+	std::vector<Call *> calls;
+	void (*onIncomingCallExternalEvent)(); 
 public:
     virtual void onRegState(OnRegStateParam &prm) {
         AccountInfo ai = getInfo();
@@ -63,6 +65,12 @@ public:
 		prm.opt.audioCount = 1;
         //call->
 		call->answer(prm);
+		
+		
+		if (onIncomingCallExternalEvent != NULL)
+		{
+			(*onIncomingCallExternalEvent)();
+		}
     }
 };
 
@@ -91,7 +99,9 @@ public:
 	int setNullDev();
 	bool regIsActive();
 	bool answer(std::string dest);
-private:
-
 	
+	virtual void onIncomingCall();
+private:
 };
+
+#endif

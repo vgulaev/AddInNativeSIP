@@ -1,4 +1,7 @@
 #include "stdafx.h"
+#include <iostream>
+#include <pjsua2.hpp>
+#include <pj/unicode.h>
 
 #include "vgsip.h"
 
@@ -43,6 +46,11 @@ void MyCall::onCallMediaState(OnCallMediaStateParam &prm)
             mgr.getCaptureDevMedia().startTransmit(*aud_med);
         }
     }
+}
+
+MyAccount::MyAccount()
+{
+	onIncomingCallExternalEvent = NULL;
 }
 
 VGsip::VGsip()
@@ -182,4 +190,9 @@ bool VGsip::answer(std::string dest)
 			std::cout << ci.remoteUri << std::endl;
        }
 	return true;
+}
+
+void VGsip::onIncomingCall()
+{
+	std::cout << "Own way!!!" << std::endl;
 }
