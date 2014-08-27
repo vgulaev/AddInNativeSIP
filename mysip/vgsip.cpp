@@ -95,7 +95,7 @@ bool VGsip::reg_on_srv() {
 	acc = new MyAccount;
 	acc->create(acfg);
 
-	//acc->mySip = this;
+	acc->ownerClass = (int*) this;
 	
 	return true;
 }
