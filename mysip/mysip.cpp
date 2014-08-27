@@ -5,8 +5,8 @@
 //#include <stdint.h>
 #include <pjsua2.hpp>
 #include <iostream>
+
 #include "vgsip.h"
-#include "vgscl.h"
 
 using namespace pj;
 
