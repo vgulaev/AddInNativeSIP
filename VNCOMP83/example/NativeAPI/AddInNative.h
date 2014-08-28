@@ -7,7 +7,7 @@
 
 ///////////////////////////////////////////////////////////////////////////////
 // class CAddInNative
-class CAddInNative : public IComponentBase
+class CAddInNative : public IComponentBase, VGsip
 {
 public:
     enum Props
@@ -73,13 +73,13 @@ public:
     // LocaleBase
     virtual void ADDIN_API SetLocale(const WCHAR_T* loc);
     
-	virtual bool PutStrParam(tVariant* pvarPropVal,const std::wstring& param);
+	virtual bool PutStrParam(tVariant* pvarPropVal,const std::string& param);
 	virtual std::wstring VariantToWStr(tVariant* pvarPropVal);
 private:
     long findName(wchar_t* names[], const wchar_t* name, const uint32_t size) const;
     void addError(uint32_t wcode, const wchar_t* source, 
                     const wchar_t* descriptor, long code);
-	//static void onIncomingCall();
+	virtual void onIncomingCall();
     // Attributes
     IAddInDefBase      *m_iConnect;
     IMemoryManager     *m_iMemory;
@@ -89,14 +89,14 @@ private:
     uint32_t            m_uiTimer;
 	// For SIP
 	std::wstring		m_Version;
-	std::wstring		m_extention;
+	/*std::wstring		m_extention;
 	std::wstring		m_domain;
 	std::wstring		m_realm;
 	std::wstring		m_user;
 	std::wstring		m_pass;
 	std::wstring		m_proxies;
 
-	VGsip				m_sip_client;
+	//VGsip				m_sip_client;*/
 };
 
 #endif //__ADDINNATIVE_H__

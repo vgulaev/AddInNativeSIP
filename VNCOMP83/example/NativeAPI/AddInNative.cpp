@@ -95,11 +95,11 @@ CAddInNative::CAddInNative()
 {
     m_iMemory = 0;
     m_iConnect = 0;
-	m_domain = L"";
-	m_realm = L"";
-	m_user = L"";
-	m_pass = L"";
-	m_proxies = L"";
+	domain = "";
+	realm = "";
+	user = "";
+	pass = "";
+	proxies = "";
 	//m_Version = L"v0.001 status:beta";
 }
 //---------------------------------------------------------------------------//
@@ -110,8 +110,8 @@ CAddInNative::~CAddInNative()
 bool CAddInNative::Init(void* pConnection)
 { 
     m_iConnect = (IAddInDefBase*)pConnection;
-	m_Version = L"v0.001 status:alpha";
-	m_extention = L"dfsdsdsv";
+	m_Version = L"v0.002 status:alpha";
+	extention = "dfsdsdsv";
     return m_iConnect != NULL;
 }
 //---------------------------------------------------------------------------//
@@ -124,7 +124,7 @@ long CAddInNative::GetInfo()
 //---------------------------------------------------------------------------//
 void CAddInNative::Done()
 {
-	m_sip_client.destroy_client();
+	destroy_client();
 	IAddInDefBaseEx* cnn = (IAddInDefBaseEx*)m_iConnect;
 	IMsgBox* imsgbox = (IMsgBox*)cnn->GetInterface(eIMsgBox);
 	imsgbox->Alert(L"Спасибо!!!");
@@ -216,25 +216,26 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
         TV_BOOL(pvarPropVal) = true;
         break;
 	case ePropVersion:
-		PutStrParam(pvarPropVal, m_Version);
+		//PutStrParam(pvarPropVal, m_Version);
+		PutStrParam(pvarPropVal, "sddsds");
 		break;
     case ePropExtention:
-        PutStrParam(pvarPropVal, m_extention);
+        PutStrParam(pvarPropVal, extention);
 		break;
     case ePropDomain:
-        PutStrParam(pvarPropVal, m_domain);
+        PutStrParam(pvarPropVal, domain);
 		break;
     case ePropRealm:
-        PutStrParam(pvarPropVal, m_realm);
+        PutStrParam(pvarPropVal, realm);
 		break;
     case ePropUser:
-        PutStrParam(pvarPropVal, m_user);
+        PutStrParam(pvarPropVal, user);
 		break;
     case ePropPass:
-        PutStrParam(pvarPropVal, m_pass);
+        PutStrParam(pvarPropVal, pass);
 		break;
     case ePropProxies:
-        PutStrParam(pvarPropVal, m_proxies);
+        PutStrParam(pvarPropVal, proxies);
 		break;
     default:
         return false;
@@ -257,48 +258,48 @@ bool CAddInNative::SetPropVal(const long lPropNum, tVariant *varPropVal)
 		{
 		if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-		m_extention = VariantToWStr(varPropVal);
-		m_sip_client.extention = unicode_to_pj_str(m_extention.c_str());
+		extention = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+		//m_sip_client.extention = unicode_to_pj_str(m_extention.c_str());
 		}
         break;
     case ePropUser:
         {
         if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-        m_user = VariantToWStr(varPropVal);
-        m_sip_client.user = unicode_to_pj_str(m_user.c_str());
+        user = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+        //m_sip_client.user = unicode_to_pj_str(m_user.c_str());
         }
         break;
     case ePropPass:
         {
         if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-        m_pass = VariantToWStr(varPropVal);
-        m_sip_client.pass = unicode_to_pj_str(m_pass.c_str());
+        pass = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+        //m_sip_client.pass = unicode_to_pj_str(m_pass.c_str());
         }
         break;
     case ePropRealm:
         {
         if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-        m_realm = VariantToWStr(varPropVal);
-        m_sip_client.realm = unicode_to_pj_str(m_realm.c_str());
+        realm = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+        //m_sip_client.realm = unicode_to_pj_str(m_realm.c_str());
         }
         break;
     case ePropDomain:
         {
         if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-        m_domain = VariantToWStr(varPropVal);
-        m_sip_client.domain = unicode_to_pj_str(m_domain.c_str());
+        domain = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+        //m_sip_client.domain = unicode_to_pj_str(m_domain.c_str());
         }
         break;
     case ePropProxies:
         {
         if (TV_VT(varPropVal) != VTYPE_PWSTR)
             return false;
-        m_proxies = VariantToWStr(varPropVal);
-        m_sip_client.proxies = unicode_to_pj_str(m_proxies.c_str());
+        proxies = unicode_to_pj_str(VariantToWStr(varPropVal).c_str());
+        //m_sip_client.proxies = unicode_to_pj_str(m_proxies.c_str());
         }
         break;
     case ePropIsTimerPresent:
@@ -461,9 +462,6 @@ bool CAddInNative::HasRetVal(const long lMethodNum)
 
     return false;
 }
-void myproc()
-{
-}
 void onIncomingCall()
 {
 	/*pAsyncEvent = m_iConnect;
@@ -562,25 +560,25 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
         break;
 	case eMethInit:
 		{
-			m_sip_client.init();
+			init();
 		}
 		break;
 	case eMethReg:
 		{
-			m_sip_client.reg_on_srv();
+			reg_on_srv();
 		}
 		break;
 	case eMethMakeCall:
 		{
-			IAddInDefBaseEx* cnn = (IAddInDefBaseEx*)m_iConnect;
+			/*IAddInDefBaseEx* cnn = (IAddInDefBaseEx*)m_iConnect;
 			IMsgBox* imsgbox = (IMsgBox*)cnn->GetInterface(eIMsgBox);
-			imsgbox->Alert(paParams->pwstrVal);
-			m_sip_client.make_call(unicode_to_pj_str(paParams->pwstrVal));
+			imsgbox->Alert(paParams->pwstrVal);*/
+			make_call(unicode_to_pj_str(paParams->pwstrVal));
 		}
 		break;
 	case eMethsetNullDev:
 		{
-			m_sip_client.setNullDev();
+			setNullDev();
 		}
 		break;
     default:
@@ -670,7 +668,7 @@ bool CAddInNative::CallAsFunc(const long lMethodNum,
 				pAsyncEvent->ExternalEvent(L"Hello", L"Hello", L"Hello");
 			}*/
 			TV_VT(pvarRetValue) = VTYPE_BOOL;
-			pvarRetValue->bVal = m_sip_client.regIsActive();
+			pvarRetValue->bVal = regIsActive();
 			ret = true;
 		}
 		break;
@@ -839,7 +837,7 @@ uint32_t getLenShortWcharStr(const WCHAR_T* Source)
     return res;
 }
 //---------------------------------------------------------------------------//
-bool CAddInNative::PutStrParam(tVariant* pvarPropVal,const std::wstring& param)
+bool CAddInNative::PutStrParam(tVariant* pvarPropVal,const std::string& param)
 {
 	bool bRes = true;
 
@@ -847,13 +845,13 @@ bool CAddInNative::PutStrParam(tVariant* pvarPropVal,const std::wstring& param)
         
     TV_VT(pvarPropVal) = VTYPE_PWSTR;
     
-    //std::wstring wTemp(param.begin(),param.end() );
+    std::wstring wTemp(param.begin(),param.end());
  
-    int iActualSize = param.length() + 1;
+	int iActualSize = wTemp.length() + 1;
     if (m_iMemory)
     {
         if (m_iMemory->AllocMemory((void**)&wsPropValue, iActualSize * sizeof(WCHAR_T)))
-            ::convToShortWchar(&wsPropValue, param.c_str(), iActualSize);
+			::convToShortWchar(&wsPropValue, wTemp.c_str(), iActualSize);
     }
     TV_WSTR(pvarPropVal) = wsPropValue;
     pvarPropVal->wstrLen = iActualSize-1;
@@ -871,4 +869,14 @@ std::wstring CAddInNative::VariantToWStr(tVariant* pvarPropVal)
 	delete[] name;
 
 	return res;
+}
+
+void CAddInNative::onIncomingCall()
+{
+	pAsyncEvent = m_iConnect;
+	if (!pAsyncEvent){}
+	else
+	{
+	pAsyncEvent->ExternalEvent(L"Hello", L"Hello", L"Hello");
+	}
 }
