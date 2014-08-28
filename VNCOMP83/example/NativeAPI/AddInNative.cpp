@@ -110,7 +110,7 @@ CAddInNative::~CAddInNative()
 bool CAddInNative::Init(void* pConnection)
 { 
     m_iConnect = (IAddInDefBase*)pConnection;
-	m_Version = L"v0.002 status:alpha";
+	m_Version = "v0.003 status:alpha";
 	extention = "dfsdsdsv";
     return m_iConnect != NULL;
 }
@@ -216,8 +216,8 @@ bool CAddInNative::GetPropVal(const long lPropNum, tVariant* pvarPropVal)
         TV_BOOL(pvarPropVal) = true;
         break;
 	case ePropVersion:
-		//PutStrParam(pvarPropVal, m_Version);
-		PutStrParam(pvarPropVal, "sddsds");
+		PutStrParam(pvarPropVal, m_Version);
+		//PutStrParam(pvarPropVal, "sddsds");
 		break;
     case ePropExtention:
         PutStrParam(pvarPropVal, extention);
@@ -462,15 +462,6 @@ bool CAddInNative::HasRetVal(const long lMethodNum)
 
     return false;
 }
-void onIncomingCall()
-{
-	/*pAsyncEvent = m_iConnect;
-	if (!pAsyncEvent){}
-	else
-	{
-		pAsyncEvent->ExternalEvent(L"Hello", L"Hello", L"Hello");
-	}*/
-}
 //---------------------------------------------------------------------------//
 bool CAddInNative::CallAsProc(const long lMethodNum,
                     tVariant* paParams, const long lSizeArray)
@@ -552,7 +543,6 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 						}
                         else
                             imsgbox->Alert(L"Cancel");
-							//imsgbox->Alert(m_Version);
                     }
                 }
             }
@@ -570,9 +560,6 @@ bool CAddInNative::CallAsProc(const long lMethodNum,
 		break;
 	case eMethMakeCall:
 		{
-			/*IAddInDefBaseEx* cnn = (IAddInDefBaseEx*)m_iConnect;
-			IMsgBox* imsgbox = (IMsgBox*)cnn->GetInterface(eIMsgBox);
-			imsgbox->Alert(paParams->pwstrVal);*/
 			make_call(unicode_to_pj_str(paParams->pwstrVal));
 		}
 		break;
@@ -871,12 +858,13 @@ std::wstring CAddInNative::VariantToWStr(tVariant* pvarPropVal)
 	return res;
 }
 
-void CAddInNative::onIncomingCall()
+void CAddInNative::onIncomingCall(std::string dest)
 {
 	pAsyncEvent = m_iConnect;
 	if (!pAsyncEvent){}
 	else
 	{
-	pAsyncEvent->ExternalEvent(L"Hello", L"Hello", L"Hello");
+		wchar_t *who = L"VGSip", *what = L"IncomingCall";
+		pAsyncEvent->ExternalEvent(who, what, L"Hello");
 	}
 }

@@ -36,7 +36,7 @@ public:
 	bool regIsActive();
 	bool answer(std::string dest);
 	
-	virtual void onIncomingCall();
+	virtual void onIncomingCall(std::string dest);
 private:
 };
 

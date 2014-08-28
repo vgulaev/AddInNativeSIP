@@ -79,7 +79,7 @@ private:
     long findName(wchar_t* names[], const wchar_t* name, const uint32_t size) const;
     void addError(uint32_t wcode, const wchar_t* source, 
                     const wchar_t* descriptor, long code);
-	virtual void onIncomingCall();
+	virtual void onIncomingCall(std::string dest);
     // Attributes
     IAddInDefBase      *m_iConnect;
     IMemoryManager     *m_iMemory;
@@ -88,7 +88,7 @@ private:
 	bool                m_boolEnabled;
     uint32_t            m_uiTimer;
 	// For SIP
-	std::wstring		m_Version;
+	std::string		m_Version;
 	/*std::wstring		m_extention;
 	std::wstring		m_domain;
 	std::wstring		m_realm;

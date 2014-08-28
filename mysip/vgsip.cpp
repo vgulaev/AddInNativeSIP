@@ -160,7 +160,7 @@ bool VGsip::answer(std::string dest)
 	return true;
 }
 
-void VGsip::onIncomingCall()
+void VGsip::onIncomingCall(std::string dest)
 {
 	std::cout << "Own way!!!" << std::endl;
 }
